@@ -1,22 +1,23 @@
-package com.example.flutterandroid.router;
+package com.example.flutterandroid.router
 
-public class RouteConstant {
-
+object RouteConstant {
     /**
      * Flutter页面
      */
     //测试界面
-    public static String flutterTest = "flutter://test";
+    var flutterTest = "flutter://test"
 
     /**
      * Native页面
      */
-    private static String nativeScheme = "flutterandroid://";
+    private const val nativeScheme = "flutterandroid://"
+
     //测试界面
-    public static String nativeTest = nativeScheme + "app/test";
+    var nativeTest = nativeScheme + "app/test"
 
-    public interface Test {
-        String EXTRA_CONTENT = "content";
+    interface Test {
+        companion object {
+            const val EXTRA_CONTENT = "content"
+        }
     }
-
 }

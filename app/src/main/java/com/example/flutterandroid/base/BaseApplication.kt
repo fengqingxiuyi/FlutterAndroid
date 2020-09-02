@@ -1,67 +1,50 @@
-package com.example.flutterandroid.base;
+package com.example.flutterandroid.base
 
-import android.app.Application;
-import android.content.Context;
-import android.util.Log;
-
-import com.example.flutterandroid.BuildConfig;
-import com.example.flutterandroid.channel.FlutterMethodChannel;
-import com.example.flutterandroid.router.RouteUtil;
-import com.idlefish.flutterboost.FlutterBoost;
-import com.idlefish.flutterboost.Platform;
-import com.idlefish.flutterboost.Utils;
-import com.idlefish.flutterboost.interfaces.INativeRouter;
-
-import java.util.Map;
-
-import io.flutter.embedding.android.FlutterView;
+import android.app.Application
+import android.util.Log
+import com.example.flutterandroid.BuildConfig
+import com.example.flutterandroid.channel.FlutterMethodChannel
+import com.example.flutterandroid.router.RouteUtil
+import com.idlefish.flutterboost.FlutterBoost
+import com.idlefish.flutterboost.FlutterBoost.BoostLifecycleListener
+import com.idlefish.flutterboost.Utils
+import com.idlefish.flutterboost.interfaces.INativeRouter
+import io.flutter.embedding.android.FlutterView
 
 /**
  * @author fqxyi
  * @date 2020/9/2
  */
-public class BaseApplication extends Application {
+class BaseApplication : Application() {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initFlutterBoost();
+    override fun onCreate() {
+        super.onCreate()
+        initFlutterBoost()
     }
 
-    private void initFlutterBoost() {
+    private fun initFlutterBoost() {
         //在Flutter页面中打开Native页面
-        INativeRouter router = new INativeRouter() {
-            @Override
-            public void openContainer(Context context, String url, Map<String, Object> urlParams, int requestCode, Map<String, Object> exts) {
-                String assembleUrl = Utils.assembleUrl(url, urlParams);
-                Log.i("assembleUrl", assembleUrl);
-                RouteUtil.openNativePage(context, assembleUrl);
-            }
-        };
+        val router = INativeRouter { context, url, urlParams, requestCode, exts ->
+            val assembleUrl = Utils.assembleUrl(url, urlParams)
+            Log.i("assembleUrl", assembleUrl)
+            RouteUtil.openNativePage(context, assembleUrl)
+        }
         //FlutterBoost生命周期回调
-        FlutterBoost.BoostLifecycleListener boostLifecycleListener = new FlutterBoost.BoostLifecycleListener() {
-            @Override
-            public void beforeCreateEngine() {}
-
-            @Override
-            public void onEngineCreated() {
-                new FlutterMethodChannel(BaseApplication.this).registerChannel();
+        val boostLifecycleListener = object : BoostLifecycleListener {
+            override fun beforeCreateEngine() {}
+            override fun onEngineCreated() {
+                FlutterMethodChannel(this@BaseApplication).registerChannel()
             }
-
-            @Override
-            public void onPluginsRegistered() {}
-
-            @Override
-            public void onEngineDestroy() {}
-        };
+            override fun onPluginsRegistered() {}
+            override fun onEngineDestroy() {}
+        }
         //FlutterBoost初始化
-        Platform platform = new FlutterBoost
-                .ConfigBuilder(this, router)
-                .isDebug(BuildConfig.DEBUG)
-                .whenEngineStart(FlutterBoost.ConfigBuilder.ANY_ACTIVITY_CREATED)
-                .renderMode(FlutterView.RenderMode.texture)
-                .lifecycleListener(boostLifecycleListener)
-                .build();
-        FlutterBoost.instance().init(platform);
+        val platform = FlutterBoost.ConfigBuilder(this, router)
+            .isDebug(BuildConfig.DEBUG)
+            .whenEngineStart(FlutterBoost.ConfigBuilder.ANY_ACTIVITY_CREATED)
+            .renderMode(FlutterView.RenderMode.texture)
+            .lifecycleListener(boostLifecycleListener)
+            .build()
+        FlutterBoost.instance().init(platform)
     }
 }

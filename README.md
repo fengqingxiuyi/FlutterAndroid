@@ -2,6 +2,9 @@
 
 学习总结Flutter：这是一个集成Flutter模块的Android工程
 
+- [Flutter官网](https://flutter.dev/)
+- [Flutter中文网](https://flutterchina.club/)
+
 # 命令
 
 - flutter --version：查看当前安装的flutter版本
@@ -35,36 +38,52 @@ flutter
              |--constants //常量模块
              |--page //页面
              |--utils //工具模块
-             |--main.dart //FlutterModule入口文件
-        |--pubspec.yaml //FlutterModule的配置文件
+             |--main.dart //flutter_module入口文件
+        |--pubspec.yaml //flutter_module的配置文件
 ```
 
 # 从0到1的步骤
 
 IDE：AndroidStudio
 
-1. 创建FlutterModule：File -> New -> New Flutter Project... -> Flutter Module
+0. 环境变量配置：参考[Flutter中文网教程](https://flutterchina.club/get-started/install/)
 
-2. 创建NativeProject：File -> New -> New Project...
+1. 创建flutter_module：File -> New -> New Flutter Project... -> Flutter Module
 
-3. NativeProject依赖FlutterModule
+2. 创建FlutterAndroid：File -> New -> New Project...
 
-3.1. 操作settings.gradle依赖FlutterModule
+3. FlutterAndroid依赖flutter_module
 
-`flutterRoot`在`gradle.properties`文件中配置
+3.1. 编辑settings.gradle文件，依赖flutter_module
+
+`flutterRoot`在`gradle.properties`文件中配置，配置内容如下：
+
+```properties
+# flutter项目根目录名称
+flutterRoot=flutter_module
+```
+
+接着在settings.gradle文件中增加如下配置：
 
 ```groovy
 //省略其他内容
+Properties properties = new Properties()
+properties.load(new File(rootProject.getProjectDir(), 'local.properties').newDataInputStream())
+boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
+
 if (isFlutterMode) {
     setBinding(new Binding([gradle: this]))
     evaluate(new File(
             settingsDir.parent,
             "${flutterRoot}/.android/include_flutter.groovy"
     ))
+
+    include ":${flutterRoot}"
+    project(":${flutterRoot}").projectDir = new File("../${flutterRoot}")
 }
 ```
 
-3.2. 操作app/build.gradle依赖flutter和flutter_boost
+3.2. 编辑FlutterAndroid/app/build.gradle文件，依赖flutter和flutter_boost
 
 ```groovy
 dependencies {
@@ -102,12 +121,13 @@ dependencies {
 
 4. 初始化FlutterBoost
 
-NativeProject中的初始化：具体细节在`BaseApplication.java`中
-FlutterModule中的初始化：具体细节在`main.dart`中
+FlutterAndroid中的初始化：具体细节在`BaseApplication.java`中
+flutter_module中的初始化：具体细节在`main.dart`中
 
-# 开启Flutter
+# 开启和关闭Flutter
 
-在`local.properties`文件中添加`FlutterMode=true`
+- 开启Flutter：在`local.properties`文件中添加`FlutterMode=true`
+- 关闭Flutter：在`local.properties`文件中添加`FlutterMode=false`
 
 # 断点调试
 
