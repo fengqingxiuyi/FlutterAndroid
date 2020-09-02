@@ -19,6 +19,17 @@ allprojects {
         google()
         jcenter()
     }
+    parseLocalProperties()
+}
+
+def parseLocalProperties() {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
+        ext.isFlutterMode = isFlutterMode
+    }
 }
 
 task clean(type: Delete) {

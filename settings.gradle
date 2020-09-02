@@ -1,2 +1,17 @@
 include ':app'
 rootProject.name = "FlutterAndroid"
+
+Properties properties = new Properties()
+properties.load(new File(rootProject.getProjectDir(), 'local.properties').newDataInputStream())
+boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
+
+if (isFlutterMode) {
+    setBinding(new Binding([gradle: this]))
+    evaluate(new File(
+            settingsDir.parent,
+            "${flutterRoot}/.android/include_flutter.groovy"
+    ))
+
+    include ":${flutterRoot}"
+    project(":${flutterRoot}").projectDir = new File("../${flutterRoot}")
+}

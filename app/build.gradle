@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.flutterandroid"
@@ -13,9 +13,22 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    //Fix Error: Invoke-customs are only supported starting with Android O (--min-api 26)。
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    //flutter依赖，flutter调试模式使用本地依赖，否则远程依赖
+    if (project.hasProperty('isFlutterMode') && project.getProperty('isFlutterMode')) {
+        implementation project(':flutter')
+        implementation project(':flutter_boost')
+    } else {
+//        implementation 'com.example.flutter:flutter_module:1.0.0'
+    }
 }
