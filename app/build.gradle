@@ -14,10 +14,61 @@ android {
         versionName "1.0"
     }
 
-    //Fix Error: Invoke-customs are only supported starting with Android O (--min-api 26)。
+    //签名文件配置
+    signingConfigs {
+        release {
+            keyAlias 'flutterandroid'
+            keyPassword '123456'
+            storeFile file('flutterandroid.keystore')
+            storePassword '123456'
+        }
+        debug {
+            keyAlias 'flutterandroid'
+            keyPassword '123456'
+            storeFile file('flutterandroid.jks')
+            storePassword '123456'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    /**
+     * Execution failed for task ':app:mergeExtDexRelease'.
+     * > Could not resolve all files for configuration ':app:releaseRuntimeClasspath'.
+     *    > Failed to transform flutter_embedding_release-1.0.0-c4229bfbbae455ad69c967be19aee3fadd6486e1.jar (io.flutter:flutter_embedding_release:1.0.0-c4229bfbbae455ad69c967be19aee3fadd6486e1) to match attributes {artifactType=android-dex, dexing-enable-desugaring=false, dexing-incremental-desugaring-v2=false, dexing-is-debuggable=false, dexing-min-sdk=21, org.gradle.category=library, org.gradle.libraryelements=jar, org.gradle.status=release, org.gradle.usage=java-runtime}.
+     *       > Execution failed for DexingNoClasspathTransform: /Users/fqxyi/.gradle/caches/transforms-2/files-2.1/8e27d6a58b063d566351e134ffe465b9/jetified-flutter_embedding_release-1.0.0-c4229bfbbae455ad69c967be19aee3fadd6486e1.jar.
+     *          > Error while dexing.
+     *            The dependency contains Java 8 bytecode. Please enable desugaring by adding the following to build.gradle
+     *            android {
+     *                compileOptions {
+     *                    sourceCompatibility 1.8
+     *                    targetCompatibility 1.8
+     *                }
+     *            }
+     *            See https://developer.android.com/studio/write/java8-support.html for details. Alternatively, increase the minSdkVersion to 24 or above.
+     */
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
+    }
+
+    lintOptions {
+        /**
+         * TODO fqxyi 暂时以这种方式解决这个异常
+         * Execution failed for task ':app:lintVitalRelease'.
+         * > Could not resolve all artifacts for configuration ':app:debugRuntimeClasspath'.
+         *    > Failed to transform libs.jar to match attributes {artifactType=processed-jar, org.gradle.libraryelements=jar, org.gradle.usage=java-runtime}.
+         *       > Execution failed for JetifyTransform: /Users/fqxyi/Desktop/workspace/flutter/flutter_module/.android/Flutter/build/intermediates/flutter/debug/libs.jar.
+         *          > Transform's input file does not exist: /Users/fqxyi/Desktop/workspace/flutter/flutter_module/.android/Flutter/build/intermediates/flutter/debug/libs.jar. (See https://issuetracker.google.com/issues/158753935)
+         */
+        checkReleaseBuilds false
     }
 }
 

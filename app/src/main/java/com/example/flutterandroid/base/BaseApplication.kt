@@ -7,7 +7,6 @@ import com.example.flutterandroid.channel.FlutterMethodChannel
 import com.example.flutterandroid.router.RouteUtil
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoost.BoostLifecycleListener
-import com.idlefish.flutterboost.Utils
 import com.idlefish.flutterboost.interfaces.INativeRouter
 import io.flutter.embedding.android.FlutterView
 
@@ -23,11 +22,10 @@ class BaseApplication : Application() {
     }
 
     private fun initFlutterBoost() {
-        //在Flutter页面中打开Native页面
+        //在Flutter页面中打开Flutter或Native页面
         val router = INativeRouter { context, url, urlParams, requestCode, exts ->
-            val assembleUrl = Utils.assembleUrl(url, urlParams)
-            Log.i("assembleUrl", assembleUrl)
-            RouteUtil.openNativePage(context, assembleUrl)
+            Log.i("INativeRouter", "$url , $urlParams")
+            RouteUtil.openPage(context, url, urlParams, requestCode)
         }
         //FlutterBoost生命周期回调
         val boostLifecycleListener = object : BoostLifecycleListener {

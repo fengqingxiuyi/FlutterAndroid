@@ -4,13 +4,14 @@ object RouteConstant {
     /**
      * Flutter页面
      */
+    const val flutterScheme = "flutter://"
     //测试界面
-    var flutterTest = "flutter://test"
+    var flutterTest = flutterScheme + "test"
 
     /**
      * Native页面
      */
-    private const val nativeScheme = "flutterandroid://"
+    const val nativeScheme = "flutterandroid://"
 
     //测试界面
     var nativeTest = nativeScheme + "app/test"

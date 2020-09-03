@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     fun openTest(view: View) {
         val paramsMap = HashMap<String, String>()
         paramsMap["content"] = "Content From MainActivity"
-        RouteUtil.openFlutterPage(this, RouteConstant.flutterTest, paramsMap, CODE_SUCCESS)
+        RouteUtil.openPage(this, RouteConstant.flutterTest, paramsMap, CODE_SUCCESS)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

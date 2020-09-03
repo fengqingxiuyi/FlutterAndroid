@@ -104,13 +104,6 @@ dependencies {
 <application>
     <!-- 省略其他内容 -->
     <activity
-        android:name="io.flutter.embedding.android.FlutterActivity"
-        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-        android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme"
-        android:windowSoftInputMode="adjustResize" />
-
-    <activity
         android:name="com.idlefish.flutterboost.containers.BoostFlutterActivity"
         android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
         android:hardwareAccelerated="true"

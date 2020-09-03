@@ -42,18 +42,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name="com.idlefish.flutterboost.containers.BoostFlutterActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
             android:hardwareAccelerated="true"
             android:theme="@style/Theme.AppCompat"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize" >
+            <meta-data
+                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                android:resource="@mipmap/ic_launcher_round" />
+        </activity>
     </application>
 
 </manifest>
