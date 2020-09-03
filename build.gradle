@@ -18,6 +18,18 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //flutter官方maven仓库地址
+        maven {
+            url 'http://download.flutter.io'
+        }
+        //本地maven仓库地址
+        maven {
+            url '../../flutter_module/.android/repo-local'
+        }
+        //远程maven仓库地址
+        maven {
+            url 'http://nexus.skio.cn/repository/flutter/'
+        }
     }
     parseLocalProperties()
 }

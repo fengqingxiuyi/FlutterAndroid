@@ -80,6 +80,6 @@ dependencies {
         implementation project(':flutter')
         implementation project(':flutter_boost')
     } else {
-//        implementation 'com.example.flutter:flutter_module:1.0.0'
+        implementation 'com.example.flutter:flutter_module:1.0.1'
     }
 }
