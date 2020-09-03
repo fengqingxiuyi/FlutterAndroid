@@ -8,11 +8,14 @@
 # 命令
 
 - flutter --version：查看当前安装的flutter版本
+- flutter devices：识别连接的Android设备
 - flutter doctor：校验本机flutter环境是否正确
+- flutter upgrade：更新flutter代码,实质就是git代码更新拉取,下载flutter sdk是git仓库的打包
 - flutter version：查看所有flutter版本
 - flutter version [versionName]：切换到指定的versionName
-- flutter clean： 清空build目录
-- flutter run --[设备名称]： 运行项目到指定设备
+- flutter clean：删除`build/`和`.dart_tool/`目录,清除缓存信息,避免之前不同版本代码的影响
+- flutter run --[设备名称]：运行项目到指定设备
+- flutter -v [command]：查看APP所有日志的输出，在调试时需要配合run命令使用，即`flutter -v run`
 
 # 下载
 
