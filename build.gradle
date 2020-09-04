@@ -26,9 +26,15 @@ allprojects {
         maven {
             url '../../flutter_module/.android/repo-local'
         }
+        maven {
+            url '../../flutter_module/.android/repo-local-snapshot'
+        }
         //远程maven仓库地址
         maven {
             url 'http://nexus.skio.cn/repository/flutter/'
+        }
+        maven {
+            url 'http://nexus.skio.cn/repository/flutter-snapshot/'
         }
     }
     parseLocalProperties()
