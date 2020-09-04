@@ -40,6 +40,7 @@ flutter //本机创建的文件夹
                          |--TestActivity //测试Flutter跳转到Native、接收Flutter传递给Native的数据等功能
                     |--AndroidManifest.xml //应用清单配置文件
                |--build.gradle //app模块的gradle脚本文件
+         |--sophix //Sophix热修复相关资料
          |--build.gradle //工程和所有模块的gradle脚本文件
          |--gradle.properties //工程gradle配置文件
          |--README.md //总结
@@ -187,3 +188,20 @@ SNAPSHOT=1
 #版本名称
 VERSION_NAME=1.0.0
 ```
+
+# Sophix热修复
+
+1. [开发接入教程](https://help.aliyun.com/document_detail/61082.html?spm=a2c4g.11186623.6.575.383d77e8IxQC80)
+2. [EMAS中添加应用](https://emas.console.aliyun.com/?spm=5176.12818093.nav-right.1.488716d0pjkhrH#/productList)
+3. [EMAS使用和补丁管理](https://help.aliyun.com/document_detail/51434.html?spm=a2c4g.11186623.6.554.c7c3f2aem5IVlH)
+4. [查看EMAS中移动热修复的统计](https://emas.console.aliyun.com/?spm=5176.12818093.nav-right.1.488716d0pjkhrH#/product/3571321/hotfix/31203843/2)
+
+## 下载
+
+1. [Mac生成补丁工具](http://ams-hotfix-repo.oss-cn-shanghai.aliyuncs.com/SophixPatchTool_macos.zip?spm=a2c4g.11186623.2.10.7e9b77e81bSqTn&file=SophixPatchTool_macos.zip)
+1. [Android调试补丁工具](http://ams-hotfix-repo.oss-cn-shanghai.aliyuncs.com/hotfix_debug_tool-release.apk?spm=a2c4g.11186623.2.10.592129faRGrxnt&file=hotfix_debug_tool-release.apk)
+
+## EMAS中添加应用步骤
+
+1. 下载`aliyun-emas-services.json`
+2. 参考![EMAS配置](sophix/EMAS配置.png)

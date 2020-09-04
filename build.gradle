@@ -4,6 +4,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+        //Sophix热修复 EMAS
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
@@ -11,6 +15,10 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //https://emas.console.aliyun.com/?spm=5176.12818093.nav-right.1.488716d0pjkhrH#/productList
+        // 添加emas-services插件
+        classpath 'com.aliyun.ams:emas-services:1.0.1'
     }
 }
 
@@ -35,6 +43,10 @@ allprojects {
         }
         maven {
             url 'http://nexus.skio.cn/repository/flutter-snapshot/'
+        }
+        //Sophix热修复 EMAS
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
         }
     }
     parseLocalProperties()

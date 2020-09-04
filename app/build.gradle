@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+// 在 apply plugin: 'com.android.application' 下添加
+apply plugin: 'com.aliyun.ams.emas-services'
 
 android {
     compileSdkVersion 29
@@ -11,7 +13,12 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            //热修复支持五种
+            abiFilters 'arm64-v8a', 'armeabi', 'armeabi-v7a', 'x86', 'x86_64'
+        }
     }
 
     //签名文件配置
@@ -72,6 +79,13 @@ android {
     }
 }
 
+repositories {
+    //Sophix热修复 https://help.aliyun.com/document_detail/61082.html
+    maven {
+        url "http://maven.aliyun.com/nexus/content/repositories/releases"
+    }
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -82,4 +96,6 @@ dependencies {
     } else {
         implementation 'com.example.flutter:flutter_module:1.0.0-SNAPSHOT'
     }
+    //Sophix热修复
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.14'
 }
