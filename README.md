@@ -27,21 +27,36 @@ git clone https://gitee.com/mirrors/Flutter
 # 目录结构
 
 ```
-flutter
+flutter //本机创建的文件夹
    |--FlutterAndroid //Native工程
-         |--app/src/main/java/com/example/flutterandroid //多级目录折叠
-               |--base
-                    |--BaseApplication //Flutter初始化类
-               |--channel //Flutter与Native之间消息传递模块
-               |--router //Flutter与Native之间路由跳转工具模块
-               |--MainActivity //测试Native跳转到Flutter
-               |--TestActivity //测试Flutter跳转到Native
+         |--app/src //多级目录折叠
+               |--main
+                    |--java/com/example/flutterandroid //多级目录折叠
+                         |--base
+                              |--BaseApplication //Flutter初始化类
+                         |--channel //Flutter与Native之间消息传递模块
+                         |--router //Flutter与Native之间路由跳转工具模块
+                         |--MainActivity //测试Native跳转到Flutter、获取Flutter页面回调的消息等功能
+                         |--TestActivity //测试Flutter跳转到Native、接收Flutter传递给Native的数据等功能
+                    |--AndroidManifest.xml //应用清单配置文件
+               |--build.gradle //app模块的gradle脚本文件
+         |--build.gradle //工程和所有模块的gradle脚本文件
+         |--gradle.properties //工程gradle配置文件
+         |--README.md //总结
+         |--settings.gradle //根据gradle.properties中的配置引入flutter_module
    |--flutter_module //Flutter模块
+        |--assets //其他资源文件目录
+        |--configs //产物构建配置目录
+        |--images //图片资源文件目录
         |--lib
-             |--constants //常量模块
+             |--component //通用组件
+             |--constants //全局常量
              |--page //页面
+                  |--echarts //ECharts示例页面
+                  |--test //测试页面
              |--utils //工具模块
              |--main.dart //flutter_module入口文件
+        |--test //测试模块
         |--pubspec.yaml //flutter_module的配置文件
 ```
 
@@ -52,6 +67,17 @@ IDE：AndroidStudio
 0. 环境变量配置：参考[Flutter中文网教程](https://flutterchina.club/get-started/install/)
 
 1. 创建flutter_module：File -> New -> New Flutter Project... -> Flutter Module
+
+1.1. 目前选择了FlutterBoost作为混编的管理方式，所以需要在`pubspec.yaml`文件中增加配置：
+
+```yaml
+dependencies:
+  #https://pub.dev/packages/flutter_boost
+  flutter_boost:
+    git:
+      url: 'https://github.com/alibaba/flutter_boost.git'
+      ref: '1.12.13'
+```
 
 2. 创建FlutterAndroid：File -> New -> New Project...
 
@@ -96,12 +122,12 @@ dependencies {
         implementation project(':flutter')
         implementation project(':flutter_boost')
     } else {
-//        implementation 'com.example.flutter:flutter_module:1.0.0'
+        implementation 'com.example.flutter:flutter_module:1.0.0'
     }
 }
 ```
 
-3.3. 在AndroidManifest.xml中注册FlutterActivity和BoostFlutterActivity
+3.3. 在AndroidManifest.xml中注册BoostFlutterActivity
 
 ```xml
 <application>
@@ -142,3 +168,22 @@ Syncing files to device DLI AL10...
 ```
 
 3. 和Android一样的打断点方式
+
+# 构建产物
+
+运行flutter_module工程下的`build_android.sh`文件即可，命令：/bin/bash `build_android.sh的路径`
+
+## 构建配置
+
+配置文件：flutter_module/configs/gradle.properties
+
+配置开关：
+```properties
+#0=>上传产物到远程仓库 1=>上传产物到本地仓库
+CLOUND_MAVEN=1
+#0=>构建Release产物 1=>构建snapshot产物
+SNAPSHOT=1
+
+#版本名称
+VERSION_NAME=1.0.0
+```
