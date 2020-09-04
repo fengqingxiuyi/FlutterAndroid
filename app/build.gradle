@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-// 在 apply plugin: 'com.android.application' 下添加
+//Sophix热修复插件
 apply plugin: 'com.aliyun.ams.emas-services'
+//AOP
+apply plugin: 'com.hujiang.android-aspectjx'
 
 android {
     compileSdkVersion 29
@@ -13,7 +15,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
         ndk {
             //选择要添加的对应cpu类型的.so库。
             //热修复支持五种
@@ -39,9 +41,11 @@ android {
 
     buildTypes {
         release {
+            //签名配置
             signingConfig signingConfigs.release
         }
         debug {
+            //签名配置
             signingConfig signingConfigs.debug
         }
     }
@@ -98,4 +102,13 @@ dependencies {
     }
     //Sophix热修复
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.14'
+    //AOP
+    implementation project(":aop")
+}
+
+aspectjx {
+    //指定只对含有关键字'universal-image-loader', 'AspectJX-Demo/library'的库进行织入扫描，忽略其他库，提升编译效率
+//    includeJarFilter 'universal-image-loader', 'AspectJX-Demo/library'
+//    excludeJarFilter '.jar'
+//    ajcArgs '-Xlint:warning'
 }

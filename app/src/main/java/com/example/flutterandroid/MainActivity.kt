@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.aop.annotation.CrashSafe
 import com.example.flutterandroid.router.RouteConstant
 import com.example.flutterandroid.router.RouteUtil
 import com.idlefish.flutterboost.FlutterBoost
@@ -46,6 +47,12 @@ class MainActivity : AppCompatActivity() {
         val paramsMap = HashMap<String, String>()
         paramsMap["content"] = "Content From MainActivity"
         RouteUtil.openPage(this, RouteConstant.flutterTest, paramsMap, CODE_SUCCESS)
+    }
+
+    @CrashSafe
+    fun testAOP(view: View) {
+        val arr = arrayListOf<Int>()
+        print(arr[1])
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,3 +1,4 @@
+include ':aop'
 include ':app'
 rootProject.name = "FlutterAndroid"
 
@@ -15,6 +16,3 @@ if (isFlutterMode) {
     include ":${flutterRoot}"
     project(":${flutterRoot}").projectDir = new File("../${flutterRoot}")
 }
-
-include ':flutter_module'
-project(':flutter_module').projectDir = new File('../flutter_module')
