@@ -1,17 +1,20 @@
-package com.example.aop.aspect;
+package com.example.aop.aspect
 
-import android.util.Log;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import android.util.Log
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.Around
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Pointcut
 
 /**
  * Crash检测
  */
 @Aspect
-public class CrashSafeAspect {
+class CrashSafeAspect {
+
+    companion object {
+        private const val TAG = "CrashSafeAspect"
+    }
 
     /**
      * 定义切入点
@@ -23,11 +26,15 @@ public class CrashSafeAspect {
      *
      * @annotation 匹配那些有指定注解的连接点
      * execution 表示的Join Point，在方法执行的位置
-     *           匹配规则：(<修饰符模式>? <返回类型模式> <方法名模式>(<参数模式>) <异常模式>?)
+     * 匹配规则：(<修饰符模式>? <返回类型模式> <方法名模式>(<参数模式>) <异常模式>?)
      * call      表示的Join Point，在方法调用的位置
-     */
-    @Pointcut("@within(com.example.aop.annotation.CrashSafe) || @annotation(com.example.aop.annotation.CrashSafe)")
-    public void methodAnnotated() {}
+    </异常模式></参数模式></方法名模式></返回类型模式></修饰符模式> */
+    @Pointcut(
+        "@within(com.example.aop.annotation.CrashSafe) || " +
+                "@annotation(com.example.aop.annotation.CrashSafe)"
+    )
+    fun methodAnnotated() {
+    }
 
     /**
      * 定义一个切面方法，包裹切点方法
@@ -37,14 +44,15 @@ public class CrashSafeAspect {
      * 有synthetic标记的field和method是class内部使用的，正常的源代码里不会出现synthetic field。
      */
     @Around("execution(!synthetic * *(..)) && methodAnnotated()")
-    public Object doMethod(final ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = null;
+    @Throws(Throwable::class)
+    fun doMethod(joinPoint: ProceedingJoinPoint): Any? {
+        var result: Any? = null
         try {
-            result = joinPoint.proceed(joinPoint.getArgs());
-        } catch (Throwable e) {
-            Log.e("CrashSafeAspect", "已拦截Crash", e);
+            result = joinPoint.proceed(joinPoint.args)
+        } catch (e: Throwable) {
+            Log.e(TAG, "已拦截Crash=>", e)
         }
-        return result;
+        return result
     }
 
 }

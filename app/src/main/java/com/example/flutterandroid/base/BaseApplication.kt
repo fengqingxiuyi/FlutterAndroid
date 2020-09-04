@@ -2,8 +2,10 @@ package com.example.flutterandroid.base
 
 import android.app.Application
 import android.util.Log
+import com.example.aop.AopUtil
 import com.example.flutterandroid.BuildConfig
 import com.example.flutterandroid.channel.FlutterMethodChannel
+import com.example.flutterandroid.hotfix.FlutterPatch
 import com.example.flutterandroid.router.RouteUtil
 import com.idlefish.flutterboost.FlutterBoost
 import com.idlefish.flutterboost.FlutterBoost.BoostLifecycleListener
@@ -18,7 +20,16 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initAop()
         initFlutterBoost()
+    }
+
+    private fun initAop() {
+        AopUtil.instance.setAopListener(object : AopUtil.AopListener {
+            override fun getLibAppSoPath(path: String?) {
+                FlutterPatch.init(path)
+            }
+        })
     }
 
     private fun initFlutterBoost() {
