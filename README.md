@@ -4,6 +4,7 @@
 
 - [Flutter官网](https://flutter.dev/)
 - [Flutter中文网](https://flutterchina.club/)
+- [Flutter插件官网](https://pub.dev/)
 
 # 命令
 
@@ -17,29 +18,13 @@
 - flutter run --[设备名称]：运行项目到指定设备
 - flutter -v [command]：查看APP所有日志的输出，在调试时需要配合run命令使用，即`flutter -v run`
 
-# 下载
-
-git clone https://gitee.com/mirrors/Flutter
-
-- 本机Flutter版本：1.14.6
-- FlutterBoost版本：1.12.13
-
 # 目录结构
 
 ```
 flutter //本机创建的文件夹
    |--FlutterAndroid //Native工程
-         |--app/src //多级目录折叠
-               |--main
-                    |--java/com/example/flutterandroid //多级目录折叠
-                         |--base
-                              |--BaseApplication //Flutter初始化类
-                         |--channel //Flutter与Native之间消息传递模块
-                         |--router //Flutter与Native之间路由跳转工具模块
-                         |--MainActivity //测试Native跳转到Flutter、获取Flutter页面回调的消息等功能
-                         |--TestActivity //测试Flutter跳转到Native、接收Flutter传递给Native的数据等功能
-                    |--AndroidManifest.xml //应用清单配置文件
-               |--build.gradle //app模块的gradle脚本文件
+         |--aop //aop模块
+         |--app //app模块
          |--sophix //Sophix热修复相关资料
          |--build.gradle //工程和所有模块的gradle脚本文件
          |--gradle.properties //工程gradle配置文件
@@ -61,15 +46,36 @@ flutter //本机创建的文件夹
         |--pubspec.yaml //flutter_module的配置文件
 ```
 
-# 从0到1的步骤
+# Flutter与Android混编 从0到1的步骤
 
-IDE：AndroidStudio
+1. 下载Flutter源码，可通过镜像源下载，如：`git clone https://gitee.com/mirrors/Flutter`
 
-0. 环境变量配置：参考[Flutter中文网教程](https://flutterchina.club/get-started/install/)
+- 本机Flutter版本：1.14.6
+- flutter_boost版本：1.12.13
 
-1. 创建flutter_module：File -> New -> New Flutter Project... -> Flutter Module
+2. 环境变量配置：参考[Flutter中文网教程](https://flutterchina.club/get-started/install/)
 
-1.1. 目前选择了FlutterBoost作为混编的管理方式，所以需要在`pubspec.yaml`文件中增加配置：
+这是我Mac电脑上的配置，可参考，将其添加到`.zshrc`文件中，再通过`source`命令使其生效
+
+```
+#ADDED BY ANDROID
+export ANDROID_HOME=`Android SDK 路径`
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+#ADDED BY FLUTTER
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+export PATH=`Flutter下载路径`/bin:$PATH
+```
+
+2. 为IDE(如AndroidStudio)添加flutter和dart插件
+
+3. 执行`flutter doctor`命令查看是否需要安装其它依赖项来完成安装
+
+4. 创建flutter_module工程：File -> New -> New Flutter Project... -> Flutter Module
+
+4.1. 目前选择了flutter_boost作为混编的管理方式，所以需要在`pubspec.yaml`文件中增加配置：
 
 ```yaml
 dependencies:
@@ -80,20 +86,58 @@ dependencies:
       ref: '1.12.13'
 ```
 
-2. 创建FlutterAndroid：File -> New -> New Project...
+4.2. 编辑`main.dart`文件，初始化flutter_boost
 
-3. FlutterAndroid依赖flutter_module
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 
-3.1. 编辑settings.gradle文件，依赖flutter_module
+void main() => runApp(MyApp());
 
-`flutterRoot`在`gradle.properties`文件中配置，配置内容如下：
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    //注册路由页面
+    FlutterBoost.singleton.registerPageBuilders({
+      // 测试页面
+      'flutter://test': (pageName, params, _) => TestPage(params), //TestPage是自己写的测试页面
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'flutter_module',
+      builder: FlutterBoost.init(postPush: _onRoutePushed),
+      home: MainPage(), //MainPage为通过flutter_module启动的首页
+    );
+  }
+
+  void _onRoutePushed(
+      String pageName, String uniqueId, Map params, Route route, Future _) {}
+}
+```
+
+5. 创建FlutterAndroid工程：File -> New -> New Project...
+
+**需要保证FlutterAndroid工程和flutter_module工程处于同一目录下**
+
+6. 使FlutterAndroid工程依赖flutter_module工程
+
+6.1. 在`gradle.properties`文件中配置`flutterRoot`，配置内容如下：
 
 ```properties
 # flutter项目根目录名称
 flutterRoot=flutter_module
 ```
 
-接着在settings.gradle文件中增加如下配置：
+6.2. 编辑`settings.gradle`文件，依赖flutter_module工程：
 
 ```groovy
 //省略其他内容
@@ -113,7 +157,28 @@ if (isFlutterMode) {
 }
 ```
 
-3.2. 编辑FlutterAndroid/app/build.gradle文件，依赖flutter和flutter_boost
+6.3. 使`app模块`依赖flutter和flutter_boost
+
+编辑`工程的build.gradle`文件，获取`isFlutterMode`属性值：
+
+```groovy
+allprojects {
+    //省略其他内容
+    parseLocalProperties()
+}
+
+def parseLocalProperties() {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
+        ext.isFlutterMode = isFlutterMode
+    }
+}
+```
+
+编辑`app模块的build.gradle`文件：
 
 ```groovy
 dependencies {
@@ -128,7 +193,7 @@ dependencies {
 }
 ```
 
-3.3. 在AndroidManifest.xml中注册BoostFlutterActivity
+6.4. 在AndroidManifest.xml中注册BoostFlutterActivity
 
 ```xml
 <application>
@@ -138,14 +203,42 @@ dependencies {
         android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
         android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat"
-        android:windowSoftInputMode="adjustResize" />
+        android:windowSoftInputMode="adjustResize">
+        <meta-data
+            android:name="io.flutter.embedding.android.SplashScreenDrawable"
+            android:resource="@mipmap/ic_launcher_round" />
+    </activity>
 </application>
 ```
 
-4. 初始化FlutterBoost
+7. 在Android工程中初始化flutter_boost
 
-FlutterAndroid中的初始化：具体细节在`BaseApplication.java`中
-flutter_module中的初始化：具体细节在`main.dart`中
+```kotlin
+private fun initFlutterBoost() {
+    //在Flutter页面中打开Flutter或Native页面
+    val router = INativeRouter { context, url, urlParams, requestCode, exts ->
+        Log.i("INativeRouter", "$url , $urlParams")
+        RouteUtil.openPage(context, url, urlParams, requestCode)
+    }
+    //FlutterBoost生命周期回调
+    val boostLifecycleListener = object : BoostLifecycleListener {
+        override fun beforeCreateEngine() {}
+        override fun onEngineCreated() {
+            FlutterMethodChannel(this@BaseApplication).registerChannel()
+        }
+        override fun onPluginsRegistered() {}
+        override fun onEngineDestroy() {}
+    }
+    //FlutterBoost初始化
+    val platform = FlutterBoost.ConfigBuilder(this, router)
+        .isDebug(BuildConfig.DEBUG)
+        .whenEngineStart(FlutterBoost.ConfigBuilder.ANY_ACTIVITY_CREATED)
+        .renderMode(FlutterView.RenderMode.texture)
+        .lifecycleListener(boostLifecycleListener)
+        .build()
+    FlutterBoost.instance().init(platform)
+}
+```
 
 # 开启和关闭Flutter
 
@@ -188,20 +281,3 @@ SNAPSHOT=1
 #版本名称
 VERSION_NAME=1.0.0
 ```
-
-# Sophix热修复
-
-1. [开发接入教程](https://help.aliyun.com/document_detail/61082.html?spm=a2c4g.11186623.6.575.383d77e8IxQC80)
-2. [EMAS中添加应用](https://emas.console.aliyun.com/?spm=5176.12818093.nav-right.1.488716d0pjkhrH#/productList)
-3. [EMAS使用和补丁管理](https://help.aliyun.com/document_detail/51434.html?spm=a2c4g.11186623.6.554.c7c3f2aem5IVlH)
-4. [查看EMAS中移动热修复的统计](https://emas.console.aliyun.com/?spm=5176.12818093.nav-right.1.488716d0pjkhrH#/product/3571321/hotfix/31203843/2)
-
-## 下载
-
-1. [Mac生成补丁工具](http://ams-hotfix-repo.oss-cn-shanghai.aliyuncs.com/SophixPatchTool_macos.zip?spm=a2c4g.11186623.2.10.7e9b77e81bSqTn&file=SophixPatchTool_macos.zip)
-1. [Android调试补丁工具](http://ams-hotfix-repo.oss-cn-shanghai.aliyuncs.com/hotfix_debug_tool-release.apk?spm=a2c4g.11186623.2.10.592129faRGrxnt&file=hotfix_debug_tool-release.apk)
-
-## EMAS中添加应用步骤
-
-1. 下载`aliyun-emas-services.json`
-2. 参考![EMAS配置](sophix/EMAS配置.png)

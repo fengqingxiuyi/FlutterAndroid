@@ -2,27 +2,55 @@
 
 AOP工具库
 
-# 基础知识
+- [gradle_plugin_android_aspectjx](https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx)
+- [AOP之AspectJ在Android中的应用](https://www.jianshu.com/p/80a1e70598fe)
+- [Android Aop之Aspectj](https://www.zybuluo.com/TryLoveCatch/note/1430181)
 
-<https://www.jianshu.com/p/80a1e70598fe>
+# 目录结构
 
-<https://www.zybuluo.com/TryLoveCatch/note/1430181>
-
-# 三方库
-
-<https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx>
+```
+aop
+  |--src
+       |--main/java/com/example/aop //多级目录折叠
+            |--annotation //注解目录，通过切这些注解实现AOP拦截
+            |--aspect //Aspect目录
+                 |--CrashSafeAspect //Crash检测
+                 |--SophixAspect //Sophix检测，获取libapp.so文件存放的路径
+            |--AopUtil //工具类，包含回调SophixAspect拦截到的libapp.so的路径等功能
+  |--build.gradle //aop模块的gradle脚本文件
+  |--README.md //AOP总结
+```
 
 # 集成步骤
 
-1、在project的build.gradle中添加`classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.6'`
+1. 在project的build.gradle中添加`classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'`
 
-2、在自定义module的build.gradle中添加`implementation 'org.aspectj:aspectjrt:1.9.1'`
+注意：kotlin插件的版本不能高于`1.3.61`，gradle插件的版本不能高于`3.6.1`
 
-3、在app的build.gradle中添加`apply plugin: 'com.hujiang.android-aspectjx'`
+2. 创建aop模块，并在aop模块的build.gradle中添加`implementation 'org.aspectj:aspectjrt:1.9.5'`
 
-4、在app的build.gradle中添加下面语句，用于打印log
+3. 编辑app模块的build.gradle文件，添加以下`必要`内容：
 
+```groovy
+//AOP
+apply plugin: 'com.hujiang.android-aspectjx'
+
+aspectjx {
+    //指定只对含有关键字'universal-image-loader', 'AspectJX-Demo/library'的库进行织入扫描，忽略其他库，提升编译效率
+//    includeJarFilter 'universal-image-loader', 'AspectJX-Demo/library'
+//    excludeJarFilter '.jar'
+//    ajcArgs '-Xlint:warning'
+}
 ```
+
+4. 编辑app模块的build.gradle文件，添加以下`可选`内容：
+
+```groovy
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
+
+//AOP日志输出
 final def log = project.logger
 final def variants = project.android.applicationVariants //libraryVariants
 //在构建工程时，执行编织
