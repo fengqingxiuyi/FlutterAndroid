@@ -4,7 +4,7 @@ rootProject.name = "FlutterAndroid"
 
 Properties properties = new Properties()
 properties.load(new File(rootProject.getProjectDir(), 'local.properties').newDataInputStream())
-boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
+boolean isFlutterMode = "1".equals(properties.getProperty('FlutterMode'))
 
 if (isFlutterMode) {
     setBinding(new Binding([gradle: this]))
