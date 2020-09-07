@@ -101,6 +101,7 @@ dependencies {
     if (project.hasProperty('isFlutterMode') && project.getProperty('isFlutterMode')) {
         implementation project(':flutter')
         implementation project(':flutter_boost')
+        implementation project(':flutter_bmfbase')
     } else {
         implementation 'com.example.flutter:flutter_module:1.0.0-SNAPSHOT'
     }

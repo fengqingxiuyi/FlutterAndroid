@@ -29,6 +29,10 @@
         <meta-data
             android:name="com.taobao.android.hotfix.RSASECRET"
             android:value="MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCank64c1MwbLfDqa6E1LcNC1LwCTCpjY0+yzOyEIfqZvX9vxNib6DxEGuzNdDt/UNiEeQxcLUEsDvSf0kUaDHsQcHw1coxWicxaih02k+3qtFXZXzcCCVunU9WVgZTA3ZP8jaoXBotPmGNUK9poLO7yfOqj82gCc7NxKomxIoapjEHoB5xTLa1/UQ5RHOARhlAFsR5b44tKXZJ9lkoiUtBvVunRhwnfON8WlTFdymc/9qg4tzkO5Fnc9GflUOza5EZehnaYpZmBx3WIw9qSJGphkT2NLEgd4o3o7OSmoM3Q3FzoIs4gI7t6o6YMLf7CcuS8AS3XYIQBFXdKtcYQH1nAgMBAAECggEATM401oVbHqPyyPxCF/O+lnk4kspN5PvO3RF9tYdmrLbGnWzMSUqgTP9WMKicB4yWa2Ht0+1jzldo8BCQkdWMbwrfNy5MCSX6cB6GyD0l+ludL+fXFUnqpj74iS+kZppCrEXqhslxq2XgeZ1J9ZOBlNgl9WUHxOb6VtbJmwZogAGljx7x1kZbkKgnJR/QbSSdW1ql1UGB8hTMbhdx+xze9ZbzzPEtfd4K5GJ8pIcv2edFcOOfmW9YD4FE+9dUzLXOqIsop/FNTQYI9qPC9rTehdFoz1xpII33lqgvhFfZCm3rYI33qZcn1NwMgy8+qwtZtAFGP20FKCdGl2s04B7taQKBgQDcJEBle3khlbPZPyX6iWnS9qFvxpb4331y4DQOmBCt/S+ueoLDYIUG4iV34s0SAuZmGJosFgwgja1ot6i3FA2l8IAe9xop3KOnr83m5SDiUFRbuufj/23wp9Y0j7NvbVlw5jYX5S4wkz4Icav52Mn/Sc+x3oUCieHlaKG2bQRdfQKBgQCzzcjJ4YtxZs9WOQc9M38YOuEPmAtNTKzdz2evpZACDVf7Cox0kR8whwIodGLsag1Bix1Fk6IesVx/r5w1po6rjGvT8EQc4C015hDDgB2iKeFP2odTisdfETdMuitQkoHhrRZ3IouQsGdsazuSq1fk41sEAkDeCQ9xWqRxiSXLswKBgQCC57+vWQQH15hx2B5CZBIck/IdoI7IAUX82Ju8DerlO4huDYXSnoOcO0AikSh2zGirT3fmPVoKxZTXj1bxPyh6g4/8Wd4iBIUAwwcChT/PtArl3TflmU+L6pHzAXynBvRHsW17OhoEYpphtQ6Z7LL5bq/lyjd38fv1SgnXi+4rlQKBgQCubS6hMg1NSLhQ4+fy5jcgcVYOA6jLJ1v3nhHvIoTuiLVWEyiomHQSZpagWi/xOvx7HhKagZrffZ3HPLwki9yR7RpZsxbQkGUriXGvxmR5AXnTNqLbV6ELx67G3z/P3SDkpj5J+pg8F/VtByX2pgQRRsHvxKPbAh0aER3ACpVA4wKBgCeTum9N51s+IG2IyiYgJVxJu3FZqDdhh9yejTMO4WqLi7DubP4yCsUoYs+5ARhndlWn1sPxCpYRFM5LCxBDLUEFs6IsO7hhyBKwdgRM+YXiJVCd9AzH4HCWKyZZ3BS8G9N3ESQ4qjIUa9z8MmMrzQkuoy+vKCSluv4OKSDia7hp" />
+        <!-- 百度地图需要以下meta-data配置 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="r6bavIB0ZOyw8dgrqzzSNSlgR21jfe5C" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
