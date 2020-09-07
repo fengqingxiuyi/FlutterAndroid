@@ -6,7 +6,13 @@ object RouteConstant {
      */
     const val flutterScheme = "flutter://"
     //测试界面
-    var flutterTest = flutterScheme + "test"
+    const val flutterTest = flutterScheme + "test"
+    //ECharts页面
+    const val flutterECharts = flutterScheme + "echarts"
+    //百度地图Demo页面
+    const val flutterBmfMapDemo = flutterScheme + "bmfMapDemo"
+    //Map页面
+    const val flutterMap = flutterScheme + "map"
 
     /**
      * Native页面
@@ -14,7 +20,7 @@ object RouteConstant {
     const val nativeScheme = "flutterandroid://"
 
     //测试界面
-    var nativeTest = nativeScheme + "app/test"
+    const val nativeTest = nativeScheme + "app/test"
 
     interface Test {
         companion object {

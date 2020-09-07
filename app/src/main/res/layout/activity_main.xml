@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="openTest"
-        android:text="打开测试页面" />
+        android:text="打开Flutter的测试页面" />
 
     <Button
         android:layout_width="match_parent"
