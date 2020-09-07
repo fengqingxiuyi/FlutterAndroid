@@ -50,7 +50,8 @@ android {
         }
         debug {
             //签名配置
-            signingConfig signingConfigs.debug
+            //因为百度地图一个应用ID只能申请一个AK，所以此处debug包也用release签名
+            signingConfig signingConfigs.release
         }
     }
 
@@ -98,7 +99,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     //flutter依赖，flutter调试模式使用本地依赖，否则远程依赖
-    if (project.hasProperty('isFlutterMode') && project.getProperty('isFlutterMode')) {
+    if (isFlutterMode) {
         implementation project(':flutter')
         implementation project(':flutter_boost')
         implementation project(':flutter_bmfbase')

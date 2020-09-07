@@ -1,7 +1,7 @@
 package com.example.flutterandroid.base
 
-import android.app.Application
 import android.util.Log
+import com.baidu.flutter_bmfbase.BmfMapApplication
 import com.example.aop.AopUtil
 import com.example.flutterandroid.BuildConfig
 import com.example.flutterandroid.channel.FlutterMethodChannel
@@ -16,7 +16,7 @@ import io.flutter.embedding.android.FlutterView
  * @author fqxyi
  * @date 2020/9/2
  */
-class BaseApplication : Application() {
+class BaseApplication : BmfMapApplication() {
 
     override fun onCreate() {
         super.onCreate()
