@@ -2,11 +2,8 @@ include ':aop'
 include ':app'
 rootProject.name = "FlutterAndroid"
 
-Properties properties = new Properties()
-properties.load(new File(rootProject.getProjectDir(), 'local.properties').newDataInputStream())
-boolean isFlutterMode = "1".equals(properties.getProperty('FlutterMode'))
-
-if (isFlutterMode) {
+boolean isFlutterProjectMode = "1" == FlutterProjectMode
+if (isFlutterProjectMode) {
     setBinding(new Binding([gradle: this]))
     evaluate(new File(
             settingsDir.parent,
@@ -16,3 +13,6 @@ if (isFlutterMode) {
     include ":${flutterRoot}"
     project(":${flutterRoot}").projectDir = new File("../${flutterRoot}")
 }
+
+include ':flutter_module'
+project(':flutter_module').projectDir = new File('../flutter_module')

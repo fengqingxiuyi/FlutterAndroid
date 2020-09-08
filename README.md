@@ -141,11 +141,8 @@ flutterRoot=flutter_module
 
 ```groovy
 //省略其他内容
-Properties properties = new Properties()
-properties.load(new File(rootProject.getProjectDir(), 'local.properties').newDataInputStream())
-boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
-
-if (isFlutterMode) {
+boolean isFlutterProjectMode = "1" == FlutterProjectMode
+if (isFlutterProjectMode) {
     setBinding(new Binding([gradle: this]))
     evaluate(new File(
             settingsDir.parent,
@@ -159,7 +156,7 @@ if (isFlutterMode) {
 
 6.3. 使`app模块`依赖flutter和flutter_boost
 
-编辑`工程的build.gradle`文件，获取`isFlutterMode`属性值：
+编辑`工程的build.gradle`文件，获取`isFlutterProjectMode`属性值：
 
 ```groovy
 allprojects {
@@ -168,13 +165,7 @@ allprojects {
 }
 
 def parseLocalProperties() {
-    File file = rootProject.file('local.properties')
-    if (file.exists()) {
-        Properties properties = new Properties()
-        properties.load(rootProject.file('local.properties').newDataInputStream())
-        boolean isFlutterMode = Boolean.valueOf(properties.getProperty('FlutterMode'))
-        ext.isFlutterMode = isFlutterMode
-    }
+    ext.isFlutterProjectMode = "1" == FlutterProjectMode
 }
 ```
 
@@ -184,7 +175,7 @@ def parseLocalProperties() {
 dependencies {
     //省略其他内容
     //flutter依赖，flutter调试模式使用本地依赖，否则远程依赖
-    if (project.hasProperty('isFlutterMode') && project.getProperty('isFlutterMode')) {
+    if (isFlutterProjectMode) {
         implementation project(':flutter')
         implementation project(':flutter_boost')
     } else {
@@ -240,10 +231,10 @@ private fun initFlutterBoost() {
 }
 ```
 
-# 开启和关闭Flutter
+# 依赖Flutter产物或依赖Flutter工程
 
-- 开启Flutter：在`local.properties`文件中添加`FlutterMode=true`
-- 关闭Flutter：在`local.properties`文件中添加`FlutterMode=false`
+- 依赖Flutter工程：在`gradle.properties`文件中添加`FlutterProjectMode=1`
+- 依赖Flutter产物：在`gradle.properties`文件中添加`FlutterProjectMode=0`
 
 # 断点调试
 

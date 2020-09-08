@@ -53,17 +53,7 @@ allprojects {
             url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
         }
     }
-    parseLocalProperties()
-}
-
-def parseLocalProperties() {
-    File file = rootProject.file('local.properties')
-    if (file.exists()) {
-        Properties properties = new Properties()
-        properties.load(rootProject.file('local.properties').newDataInputStream())
-        boolean isFlutterMode = "1".equals(properties.getProperty('FlutterMode'))
-        ext.isFlutterMode = isFlutterMode
-    }
+    ext.isFlutterProjectMode = "1" == FlutterProjectMode
 }
 
 task clean(type: Delete) {

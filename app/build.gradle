@@ -99,7 +99,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     //flutter依赖，flutter调试模式使用本地依赖，否则远程依赖
-    if (isFlutterMode) {
+    println("isFlutterProjectMode => ${isFlutterProjectMode}")
+    if (isFlutterProjectMode) {
         implementation project(':flutter')
         implementation project(':flutter_boost')
         implementation project(':flutter_bmfbase')
