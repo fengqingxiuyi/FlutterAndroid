@@ -105,7 +105,7 @@ dependencies {
         implementation project(':flutter_boost')
         implementation project(':flutter_bmfbase')
     } else {
-        implementation 'com.example.flutter:flutter_module:1.0.0-SNAPSHOT'
+        implementation 'com.example.flutter:flutter_module:1.0.1-SNAPSHOT'
     }
     //Sophix热修复
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.14'
