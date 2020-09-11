@@ -30,20 +30,6 @@ flutter //本机创建的文件夹
          |--gradle.properties //工程gradle配置文件
          |--README.md //总结
          |--settings.gradle //根据gradle.properties中的配置引入flutter_module
-   |--flutter_module //Flutter模块
-        |--assets //其他资源文件目录
-        |--configs //产物构建配置目录
-        |--images //图片资源文件目录
-        |--lib
-             |--component //通用组件
-             |--constants //全局常量
-             |--page //页面
-                  |--echarts //ECharts示例页面
-                  |--test //测试页面
-             |--utils //工具模块
-             |--main.dart //flutter_module入口文件
-        |--test //测试模块
-        |--pubspec.yaml //flutter_module的配置文件
 ```
 
 # Flutter与Android混编 从0到1的步骤
